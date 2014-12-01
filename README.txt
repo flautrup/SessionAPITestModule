@@ -1,19 +1,29 @@
-AccessControlTestModule
+SessionAPITestModule
 
 Description:
-This is a authentication module to be used for testing access control of the QV product. This should never be used in production scenarios as it is lacking security.
+This is a example implemantation in Nodejs of how the Session API in the Qlik Sense Proxy can be used.
 
 Installation:
 	Install nodejs found at http://nodejs.org/
-	Download the AccessControlTestModule.zip 
-	Unzip AccessControlTestModule
-	From the command prompt go to the directory where you unzipped AccessControTestModule
+	Download the SessionAPITestModule.zip 
+	Unzip SessionAPITestModule
+	From the command prompt go to the directory where you unzipped SessionAPITestModule
 	Run npm install
-	Go to QVC and export certificate for host that AccessControlTestModule is running on with password test
-	Copy certificates from C:\ProgramData\QlikTech\QlikView12\Repository\Exported Certificates\[host] to the directory where you unzipped AccessControlTestModule
+	Go to QMC and export certificate for host that SessionAPITestModule is running on with password test
+	Copy certificates from C:\ProgramData\Qlik\Sense\Repository\Exported Certificates\[host] to the directory where you unzipped SessionAPITestModule
 	From the directory where you unzipped AccessControlTestModule run "node AccessControlTestModule.js"
-	Add a virtual proxy to the proxy with prefix "custom", Authentication module redirect URI "https://[server]:8185, Session cookie header name to "X-Qlik-Session-custom" and press OK and then Save.
-	Access the platform on https://[QV proxy server]/custom/hub or https://[QV proxy server]/custom/qmc and you will be authenticated with the new module
+	Access SessionAPITestModule though your browser on https://[host]:8190/
+
+
+Use:
+	When you press login on the page a session token is generated for that user and sent to the proxy to be created. If you press the link
+	to redirect to the hub you are loged into Qlik Sense using the session.
+	If you go back to the https://[host]:8190/ you can now request information about the current session or logout the current session.
+
+	In a real use case a portal that embedd Qlik Sense content could register it's session after the user has been authenticated. Doing this would let
+	the portal use the portal session to request Qlik Sense content.
+	
+
 
 Setup:
 To add or change users edit the SelectUser.htm file.
