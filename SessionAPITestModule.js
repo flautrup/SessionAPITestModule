@@ -23,7 +23,12 @@ app.get('/', function (req, res) {
 
 //Create endpoint for logout
 app.get('/logout', function (req, res) {
-	logout(req,res);
+	deletesession(req,res);
+});
+
+//Redirect user to Qlik Sense with the current session
+app.get('/redirect', function (req, res) {
+    res.redirect(url.parse(RESTURI).protocol + "//" + url.parse(RESTURI).hostname + "/hub");
 });
 
 //Create endpoint for login
@@ -90,7 +95,7 @@ function info(req, res) {
         console.log("statusCode: ", sessionres.statusCode);
      
         sessionres.on('data', function (d) {
-            if(d.toString()!="null") {
+            if(d.toString()!="null" && req.cookies['X-Qlik-Session'] !== undefined ) {
                 var session = JSON.parse(d.toString());
 
                 console.log(session.UserId + " is using session " + session.SessionId);
@@ -111,7 +116,7 @@ function info(req, res) {
 };
 
 // Uses the session API to logout the current user
-function logout(req, res) {
+function deletesession(req, res) {
     //Configure parameters for the logout request
     var options = {
         host: url.parse(RESTURI).hostname,
@@ -134,6 +139,7 @@ function logout(req, res) {
             var session = JSON.parse(d.toString());
 
             console.log(session.Session.UserId + " is logged out from session " + session.Session.SessionId);
+            res.clearCookie('X-Qlik-Session');
             res.send("<HTML><HEAD></HEAD><BODY>" + session.Session.UserId + " is logged out " + session.Session.SessionId + "<BR><a href=' / '>Back to start page</a></BODY><HTML>");
         });
         
@@ -173,7 +179,7 @@ function createsession(req, res, selecteduser, userdirectory) {
             
             res.set('Content-Type', 'text/html');
             res.cookie('X-Qlik-Session', session.SessionId, { expires: 0, httpOnly: true });
-            res.send("<html><head></head><body>Session set to  " + session.SessionId + "<BR><a href=' / '>Back to start page</a></body></html>");
+            res.send("<html><head></head><body>Session set to  " + session.SessionId +" for user "+ session.UserId + "<BR><a href=' / '>Back to start page</a></body></html>");
             
         });
     });
