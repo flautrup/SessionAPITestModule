@@ -1,6 +1,6 @@
 {
-  "name": "AccessControlTestModule",
-  "description": "Authentication module used to test access control in QV",
+  "name": "SessionAPITestModule",
+  "description": "This is a example implementation in Nodejs of how the Session API in the Qlik Sense Proxy can be used.",
   "version": "0.0.1",
   "private": true,
   "dependencies": {

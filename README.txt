@@ -1,7 +1,7 @@
 SessionAPITestModule
 
 Description:
-This is a example implemantation in Nodejs of how the Session API in the Qlik Sense Proxy can be used.
+This is a example implementation in Nodejs of how the Session API in the Qlik Sense Proxy can be used.
 
 Installation:
 	Install nodejs found at http://nodejs.org/
@@ -17,10 +17,10 @@ Installation:
 
 Use:
 	When you press login on the page a session token is generated for that user and sent to the proxy to be created. If you press the link
-	to redirect to the hub you are loged into Qlik Sense using the session.
+	to redirect to the hub you are logged into Qlik Sense using the session.
 	If you go back to the https://[host]:8190/ you can now request information about the current session or logout the current session.
 
-	In a real use case a portal that embedd Qlik Sense content could register it's session after the user has been authenticated. Doing this would let
+	In a real use case a portal that embed Qlik Sense content could register it's session after the user has been authenticated. Doing this would let
 	the portal use the portal session to request Qlik Sense content.
 	
 
