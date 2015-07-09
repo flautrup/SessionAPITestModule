@@ -1,19 +1,54 @@
+/*
+=========================================================================================
+File: SessionAPITestModule.js
+Developer: Fredrik Lautrup
+Created Date: Sometime in January 2015
+
+Description:
+The SessionAPITestModule uses node.js and express.js to create a lightweight web
+server for testing the session module authentication method in Qlik Sense Enterprise Server.
+
+WARNING!:
+This code is intended for testing and demonstration purposes only.  It is not meant for
+production environments.  In addition, the code is not supported by Qlik. 
+
+Change Log
+Developer                       Change Description                      Modify Date
+-----------------------------------------------------------------------------------------
+Fredrik Lautrup                 Initial Release                         circa Q1 2015
+Jeffrey Goldberg                Updated for Expressjs v4.x              08-July-2015 
+
+-----------------------------------------------------------------------------------------
+
+
+=========================================================================================
+*/
+
 var https = require('https');
 var http = require('http');
 var express=require('express');
 var fs = require('fs');
 var url= require('url');
 
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+
 var app = express();
 
-//Replace this with the URI to your proxy
-var RESTURI = "https://rd-flp2.qliktech.com:4243/qps";
+//set the port for the listener here
+app.set('port', 8190);
 
-app.configure(function () {
-    app.use(express.bodyParser());
-	app.use(express.cookieParser());
-    app.use(app.router);
-});
+//Replace this with the URI to your proxy
+var RESTURI = "https://%SenseHostName%:4243/qps/";
+
+//New Expressjs 4.x notation for configuring middleware components
+app.use(session({ resave: true,
+                  saveUninitialized: true,
+                  secret: 'uwotm8' }));
+app.use(cookieParser('Test'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
       //Return HTML page
@@ -202,4 +237,8 @@ var httpsoptions = {
 };
 
 //Start listener
-https.createServer(httpsoptions, app).listen(8190);
+var server = https.createServer(httpsoptions, app);
+server.listen(app.get('port'), function()
+    {
+        console.log('Express server listening on port ' + app.get('port'));
+    });
